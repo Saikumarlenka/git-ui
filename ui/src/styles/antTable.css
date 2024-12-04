@@ -1,0 +1,17 @@
+/* src/styles/antTable.css */
+.ant-table {
+    @apply border border-gray-200 rounded-lg shadow-md;
+  }
+  
+  .ant-table-thead > tr > th {
+    @apply bg-gray-100 text-gray-700 font-semibold text-center;
+  }
+  
+  .ant-table-tbody > tr > td {
+    @apply text-gray-600 text-sm p-4;
+  }
+  
+  .ant-table-pagination {
+    @apply flex justify-center mt-4;
+  }
+  
