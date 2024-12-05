@@ -5,6 +5,8 @@ import RepoListPage from './pages/RepoListPage';
 import PageNotFound from './pages/PageNotFound';
 import ServerNotFound from './pages/ServerNotFound';
 import LoginPage from './pages/LoginPage';
+import PromptPage from './pages/PromptPage';
+import ModernFolderSelector from './features/repo/new';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<RepoListPage />} />
+          <Route path='/repo/:id' element={<PromptPage />} />
+        
           <Route path="/sign-in" element={<LoginPage />} />
           <Route path="/server-error" element={<ServerNotFound />} />
           
@@ -21,6 +25,7 @@ function App() {
       </div>
     </Router>
   );
+  // <ModernFolderSelector />)
 }
 
 

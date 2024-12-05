@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { askLmApi } from "../../services/promptService";
+import { askLmApi,configureLimApi } from "../../services/promptService";
 
 const initialState = {
   prompts: {},
+  configirations:{},
+
   status: "idle",
   error: null,
+  
 };
 
 export const sendPrompt = createAsyncThunk("prompts/sendPrompt", async ({ repoId, promptData }, thunkAPI) => {
@@ -15,6 +18,17 @@ export const sendPrompt = createAsyncThunk("prompts/sendPrompt", async ({ repoId
     return thunkAPI.rejectWithValue(error.response?.data || "Failed to process the prompt");
   }
 });
+export const configureLim = createAsyncThunk("configirations/configurellm" , async (configData,{rejectWithValue})=>{
+  try {
+    const response = await configureLimApi(configData);
+    return response;
+
+    
+  } catch (error) {
+    return rejectWithValue(error.response?.data|| "Failed to configure the LLM")
+    
+  }
+})
 
 const promptSlice = createSlice({
   name: "prompts",
@@ -45,7 +59,20 @@ const promptSlice = createSlice({
       .addCase(sendPrompt.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      });
+      })
+      .addCase(configureLim.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(configureLim.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.configirations={...state.configirations, ...action.payload};
+       
+      })
+      .addCase(configureLim.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });;
   },
 });
 
@@ -53,5 +80,6 @@ export const { addPrompt } = promptSlice.actions;
 export const selectPromptsByRepo = (state, repoId) => state.prompts.prompts[repoId] || [];
 export const selectPromptStatus = (state) => state.prompts.status;
 export const selectPromptError = (state) => state.prompts.error;
+
 
 export default promptSlice.reducer;
