@@ -4,11 +4,11 @@ import axiosInstance from "../axios/axiosInstance";
 
 export const askLmApi = async (askData) => {
     try {
-      const response = await axiosInstance.post("/ask-lm", askData); // Include request body
+      const response = await axiosInstance.post("/ask-lm", askData); 
       const data = response.data;
   
       // Show success notification
-      notify("success", "Success", "Request processed successfully!");
+      notify("success", "Success",data.message || "Request processed successfully!");
   
       return data;
     } catch (error) {
@@ -25,3 +25,28 @@ export const askLmApi = async (askData) => {
       throw error;
     }
   };
+
+
+export const configureLimApi = async (configData) => {
+  try {
+   
+    const response = await axiosInstance.post("/llm-config/", configData);
+    const data = response.data;
+
+    // Show success notification
+    notify("success", "Configuration Success", data.message || "Configuration applied successfully!");
+
+    return data; // Return the response data
+  } catch (error) {
+    console.error("Error in configureLimApi:", error);
+
+    // Show error notification
+    notify(
+      "error",
+      "Configuration Failed",
+      error.response?.data?.message || "An unexpected error occurred."
+    );
+
+    throw error; 
+  }
+};
