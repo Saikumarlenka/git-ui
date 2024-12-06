@@ -1,26 +1,33 @@
 import React, { useState, useRef, useEffect, useDeferredValue } from "react";
 import { Button, Modal, Typography, Space, Input, message } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { configureLim } from "./promptSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { configureLim, sendPromptToApi, selecttransformedcode} from "./promptSlice";
+
 
 // LLM Providers
 const LLM_PROVIDERS = [
   // { id: 'anthropic', name: 'Anthropic', logo: 'https://i.ibb.co/yWfJFPx/icons8-claude-120.png'},
   { id: 'openai', name: 'OpenAI', logo: 'https://openai.com/favicon.ico' },
-  { id: 'google', name: 'Google', logo: 'https://www.google.com/favicon.ico' }
+  { id: 'google', name: 'Gemini', logo: 'https://www.google.com/favicon.ico' }
 ];
 
 // Models for each provider
 const PROVIDER_MODELS = {
  
   'openai': [
-    { id: 'gpt-4', name: 'GPT-4' },
-    { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo' }
+    { id: 'GPT-4o', name: 'GPT-4o' },
+    {id:'GPT-4o mini', name: 'GPT -4o mini'},
+    {id:'GPT-4 Turbo', name:'GPT-4 Turbo'},
+    {id:'GPT-4', name:'GPT-4'},
+    { id: ' GPT-3.5 Turbo', name: 'GPT-3.5 Turbo' },
+    {id:'DALL·E',name:'DALL·E'}
   ],
   'google': [
-    { id: 'gemini-pro', name: 'Gemini Pro' },
-    { id: 'gemini-ultra', name: 'Gemini Ultra' }
+    { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+    { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 flash-8b' },
+    {id:'gemini-1.5-pro', name:'Gemini 1.5 Pro'},
+    {id:'gemini-1.0-pro',name:'Gemini 1.0 Pro'}
   ]
 };
 
@@ -28,6 +35,7 @@ const { Text, Title } = Typography;
 
 const Prompt = () => {
   const dispatch = useDispatch()
+  const transformedCode = useSelector(selecttransformedcode)
   const [value, setValue] = useState("");
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(null);
@@ -36,6 +44,13 @@ const Prompt = () => {
   const textareaRef = useRef(null);
 
   const handleButtonClick = () => {
+    const url = window.location.pathname;
+    const payload = {prompt:value,
+      dry_run:"True"
+    }
+
+    const projectName = url.split('/').pop();
+    dispatch(sendPromptToApi({ projectName, payload }));
     console.log("Button inside textarea clicked:", value);
   };
 
@@ -120,6 +135,12 @@ const Prompt = () => {
       </div>
 
       <div className="w-full h-4/6 border border-spacing-1 mt-10">
+      {transformedCode && (
+        <div>
+          <h2>Transformed Code:</h2>
+          <pre>{JSON.stringify(transformedCode, null, 2)}</pre>
+        </div>
+      )}
         <div className="flex flex-row-reverse">
           <Button className="bg-green-500 hover:bg-green-600 text-end m-4">
             Commit

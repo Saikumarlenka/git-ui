@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { askLmApi,configureLimApi } from "../../services/promptService";
+import { askLmApi,configureLimApi ,sendPromptRequestapi} from "../../services/promptService";
 
 const initialState = {
-  prompts: {},
+  transformedCode:null,
   configirations:{},
 
   status: "idle",
@@ -29,6 +29,20 @@ export const configureLim = createAsyncThunk("configirations/configurellm" , asy
     
   }
 })
+export const sendPromptToApi = createAsyncThunk(
+  'codeTransform/sendPrompt',
+  async ({ projectName, payload }, { rejectWithValue }) => {
+    try {
+      return await sendPromptRequestapi(projectName, payload); 
+    } catch (error) {
+      // Handle Axios-specific error responses
+      const errorMessage =
+        error.response?.data?.message || error.message || 'An error occurred';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 
 const promptSlice = createSlice({
   name: "prompts",
@@ -44,22 +58,19 @@ const promptSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(sendPrompt.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(sendPrompt.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        const { repoId, prompt } = action.payload;
-        if (!state.prompts[repoId]) {
-          state.prompts[repoId] = [];
-        }
-        state.prompts[repoId].push(prompt);
-      })
-      .addCase(sendPrompt.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
-      })
+    .addCase(sendPromptToApi.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+      state.transformedCode = null;
+    })
+    .addCase(sendPromptToApi.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.transformedCode = action.payload;
+    })
+    .addCase(sendPromptToApi.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    })
       .addCase(configureLim.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -80,6 +91,7 @@ export const { addPrompt } = promptSlice.actions;
 export const selectPromptsByRepo = (state, repoId) => state.prompts.prompts[repoId] || [];
 export const selectPromptStatus = (state) => state.prompts.status;
 export const selectPromptError = (state) => state.prompts.error;
+export const selecttransformedcode = (state)=> state.prompts.transformedCode
 
 
 export default promptSlice.reducer;

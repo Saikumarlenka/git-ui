@@ -50,3 +50,27 @@ export const configureLimApi = async (configData) => {
     throw error; 
   }
 };
+export const sendPromptRequestapi = async (projectName, payload) => {
+  // const url = `http://127.0.0.1:8000/code-transform/${projectName}`;
+
+  try {
+    const response = await axiosInstance.put(`/code-transform/${projectName}`, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    notify("success", "Code transform successful","");
+    return response.data; // Axios automatically parses JSON
+    
+  } catch (error) {
+    notify(
+      "error",
+      "Code transform failed",
+      "An unexpected error occured"
+    )
+    
+  }
+ 
+  
+};
