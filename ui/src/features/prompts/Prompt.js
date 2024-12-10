@@ -9,7 +9,7 @@ import { configureLim, sendPromptToApi, selecttransformedcode} from "./promptSli
 const LLM_PROVIDERS = [
   // { id: 'anthropic', name: 'Anthropic', logo: 'https://i.ibb.co/yWfJFPx/icons8-claude-120.png'},
   { id: 'openai', name: 'OpenAI', logo: 'https://openai.com/favicon.ico' },
-  { id: 'google', name: 'Gemini', logo: 'https://www.google.com/favicon.ico' }
+  { id: 'gemini', name: 'Gemini', logo: 'https://www.google.com/favicon.ico' }
 ];
 
 // Models for each provider
@@ -20,10 +20,10 @@ const PROVIDER_MODELS = {
     {id:'GPT-4o mini', name: 'GPT -4o mini'},
     {id:'GPT-4 Turbo', name:'GPT-4 Turbo'},
     {id:'GPT-4', name:'GPT-4'},
-    { id: ' GPT-3.5 Turbo', name: 'GPT-3.5 Turbo' },
+    { id: 'GPT-3.5 Turbo', name: 'GPT-3.5 Turbo' },
     {id:'DALL·E',name:'DALL·E'}
   ],
-  'google': [
+  'gemini': [
     { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
     { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 flash-8b' },
     {id:'gemini-1.5-pro', name:'Gemini 1.5 Pro'},
@@ -45,14 +45,19 @@ const Prompt = () => {
 
   const handleButtonClick = () => {
     const url = window.location.pathname;
-    const payload = {prompt:value,
-      dry_run:"True"
-    }
-
-    const projectName = url.split('/').pop();
-    dispatch(sendPromptToApi({ projectName, payload }));
+    
+    
+    const payload = {
+      prompt: value,
+      project_name: url.split('/').pop(), 
+    };
+  
+    
+    dispatch(sendPromptToApi(payload));
+  
     console.log("Button inside textarea clicked:", value);
   };
+  
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
