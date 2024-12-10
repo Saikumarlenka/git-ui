@@ -4,7 +4,6 @@ import { askLmApi,configureLimApi ,sendPromptRequestapi} from "../../services/pr
 const initialState = {
   transformedCode:null,
   configirations:{},
-
   status: "idle",
   error: null,
   
@@ -30,19 +29,19 @@ export const configureLim = createAsyncThunk("configirations/configurellm" , asy
   }
 })
 export const sendPromptToApi = createAsyncThunk(
-  'codeTransform/sendPrompt',
-  async ({ projectName, payload }, { rejectWithValue }) => {
+  "codeTransform/sendPrompt",
+  async (payload, { rejectWithValue }) => {
     try {
-      return await sendPromptRequestapi(projectName, payload); 
+      // Payload now contains both the prompt and project_name
+      const response = await sendPromptRequestapi(payload); 
+      return response; 
     } catch (error) {
-      // Handle Axios-specific error responses
       const errorMessage =
-        error.response?.data?.message || error.message || 'An error occurred';
+        error.response?.data?.message || error.message || "An error occurred";
       return rejectWithValue(errorMessage);
     }
   }
 );
-
 
 const promptSlice = createSlice({
   name: "prompts",
