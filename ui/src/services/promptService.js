@@ -54,7 +54,7 @@ export const sendPromptRequestapi = async (payload) => {
   // const url = `http://127.0.0.1:8000/code-transform/`; // URL for POST request
 
   try {
-    const response = await axiosInstance.post("/code-transform", payload, {
+    const response = await axiosInstance.post("/code-transform/", payload, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -69,5 +69,30 @@ export const sendPromptRequestapi = async (payload) => {
       "Code transform failed",
       "An unexpected error occurred"
     );
+  }
+};
+
+
+export const commitapi = async (id) => {
+
+  try {
+    const response = await axiosInstance.put(`/apply-transform/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Notify on success
+    notify("success", "Code committed successfully", "");
+    return response.data;
+    
+  } catch (error) {
+    // Notify on error
+    notify(
+      "error",
+      "Code transform failed",
+      error.response ? error.response.data.message : "An unexpected error occurred"
+    );
+    throw error;
   }
 };

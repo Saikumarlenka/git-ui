@@ -7,6 +7,7 @@ import ServerNotFound from './pages/ServerNotFound';
 import LoginPage from './pages/LoginPage';
 import PromptPage from './pages/PromptPage';
 import ModernFolderSelector from './features/repo/new';
+import DiffViewerComponent from './features/prompts/DiffViewerComponent';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    // <DiffViewerComponent />
   );
   // <ModernFolderSelector />)
 }
