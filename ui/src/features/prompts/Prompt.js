@@ -19,6 +19,7 @@ import {
   selectCommitStatus,
   selectCommitResponse,
   selectllmstatus,
+  selectPromptError,
 } from "./promptSlice";
 import CustomDiffViewerComponent from "./DiffViewerComponent";
 import { notify } from "../../antd-components/Notify";
@@ -97,6 +98,7 @@ const Prompt = () => {
   const commitresponse=useSelector(selectCommitResponse)
   console.log(commitresponse)
   const llmstatus = useSelector(selectllmstatus)
+  const errorresponse = useSelector(selectPromptError)
   // console.log(code.changes);
   
   
@@ -226,7 +228,7 @@ const Prompt = () => {
           Apply Changes
         </Button>
       </div>
-      {}
+      {code &&
 
       <div className="w-full  border border-spacing-1 mt-10">
         <div className="flex flex-col w-full">
@@ -253,7 +255,7 @@ const Prompt = () => {
             <ResponseDisplay response={commitresponse} />
           )}
         </div>
-      </div>
+      </div>}
 
       {/* LLM Settings Modal */}
       <Modal

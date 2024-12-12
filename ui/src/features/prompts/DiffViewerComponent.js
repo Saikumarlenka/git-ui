@@ -19,7 +19,7 @@ const CustomDiffViewer = ({ oldValue, newValue }) => {
 
   return (
     <div className="grid grid-cols-2 gap-4 font-mono text-sm">
-      <div className="bg-red-50 p-2 max-h-64 overflow-y-auto">
+      <div className="bg-red-50 p-2  overflow-y-auto">
         <h5 className="font-bold mb-2 text-red-600 sticky top-0 bg-red-50 z-10">Old Code</h5>
         {processedLines.map((diff, index) => (
           <div 
@@ -56,9 +56,7 @@ const CustomDiffViewerComponent = ({dummydata}) => {
                 <h4 className="text-lg text-center font-semibold text-blue-500 px-48">
                   {`Modified: ${change.file_path}`}
                 </h4>
-                {
-                  dummydata
-                }
+                
                 <CustomDiffViewer className='text-start'
                   oldValue={change.old_code} 
                   newValue={change.new_code} 
@@ -86,7 +84,7 @@ const CustomDiffViewerComponent = ({dummydata}) => {
                 <h4 className="text-lg font-semibold text-green-500">
                   {`Added: ${change.file_path}`}
                 </h4>
-                <pre className="bg-gray-100 p-4 rounded-md text-sm font-mono text-gray-700 max-h-64 overflow-y-auto">
+                <pre className="bg-gray-100 p-4 rounded-md text-sm font-mono text-gray-700  overflow-y-auto">
                   {change.new_code}
                 </pre>
               </div>
