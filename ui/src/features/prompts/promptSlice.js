@@ -7,6 +7,7 @@ const initialState = {
   configurations: {},
   status: "idle",
   error: null,
+  responserror:null,
   commitStatus: "idle",  // Added for commit status
   commitError: null,
   commitresponse:null
@@ -57,13 +58,17 @@ const promptSlice = createSlice({
   name: "prompts",
   initialState,
   reducers: {
+    resetResponse: (state) => {
+      state.transformedCode = null;
+      state.responserror=null;
+      state.transfromcodestatus = "idle"; // Reset status if needed
     
-  },
+  }},
   extraReducers: (builder) => {
     builder
       .addCase(sendPromptToApi.pending, (state) => {
         state.transfromcodestatus = "loading";
-        state.error = null;
+        state.responserror = null;
       })
       .addCase(sendPromptToApi.fulfilled, (state, action) => {
         
@@ -72,7 +77,7 @@ const promptSlice = createSlice({
       })
       .addCase(sendPromptToApi.rejected, (state, action) => {
         state.transfromcodestatus="failed"
-        state.error = action.payload;
+        state.responserror = action.payload;
       })
       .addCase(configureLim.pending, (state) => {
         state.status = "loading";
@@ -111,6 +116,8 @@ export const selectCommitError = (state) => state.prompts.commitError;  // Selec
 export const selectTransformedCodestatus = (state)=> state.prompts.transfromcodestatus;
 export const selectCommitResponse = (state)=> state.prompts.commitresponse;
 export const selectllmstatus = ( state)=> state.prompts.status
-export const promprerror = (state)=> state.prompts.error
+export const selectresponseerror = (state)=> state.prompts.responserror
+
+export const { resetResponse } = promptSlice.actions;
 
 export default promptSlice.reducer;

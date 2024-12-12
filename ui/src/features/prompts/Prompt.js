@@ -20,6 +20,8 @@ import {
   selectCommitResponse,
   selectllmstatus,
   selectPromptError,
+  resetResponse,
+  selectresponseerror
 } from "./promptSlice";
 import CustomDiffViewerComponent from "./DiffViewerComponent";
 import { notify } from "../../antd-components/Notify";
@@ -86,6 +88,8 @@ const PROVIDER_MODELS = {
 const { Text, Title } = Typography;
 
 const Prompt = () => {
+
+
   const [response, Setresponse] = useState(false);
   const [iscode,Setiscode]=useState(false)
   const dispatch = useDispatch();
@@ -98,7 +102,15 @@ const Prompt = () => {
   const commitresponse=useSelector(selectCommitResponse)
   console.log(commitresponse)
   const llmstatus = useSelector(selectllmstatus)
-  const errorresponse = useSelector(selectPromptError)
+  const errorresponse = useSelector(selectresponseerror)
+  console.log(errorresponse);
+  useEffect(() => {
+    // Cleanup function to reset response when leaving the page
+    return () => {
+      dispatch(resetResponse());
+    };
+  }, [dispatch]);
+  
   // console.log(code.changes);
   
   
@@ -127,6 +139,9 @@ const Prompt = () => {
       message.error("An error occurred while committing the code. Please try again.");
     }
   };
+  if (code && Array.isArray(code.changes) && code.changes.length === 0) {
+    message.warning("No changes are applied");
+  }
   
   
   const handlePrompt = () => {
@@ -228,6 +243,12 @@ const Prompt = () => {
           Apply Changes
         </Button>
       </div>
+      {errorresponse && (
+  <div className="error-message">
+    {errorresponse}
+  </div>
+)}
+
       {code &&
 
       <div className="w-full  border border-spacing-1 mt-10">
@@ -254,6 +275,7 @@ const Prompt = () => {
           {response && (
             <ResponseDisplay response={commitresponse} />
           )}
+          
         </div>
       </div>}
 

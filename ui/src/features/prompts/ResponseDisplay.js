@@ -62,7 +62,7 @@ const ResponseDisplay = ({ response }) => {
   }
 
   // Determine if there are errors or changes
-  const hasErrors = response.errors && response.errors.length > 0;
+  const hasErrors = response.failed_changes && response.failed_changes.length > 0;
   const hasChanges = response.applied_changes && response.applied_changes.length > 0;
 
   // Determine the overall status
@@ -158,7 +158,7 @@ const ResponseDisplay = ({ response }) => {
             message="Errors Occurred" 
             description={
               <div className="space-y-2">
-                {response.errors.map((error, index) => (
+                {response.failed_changes.map((error, index) => (
                   <div key={index} className="bg-red-50 p-2 rounded">
                     <Text strong>Action Type:</Text> {error.action_type}
                     <br />
