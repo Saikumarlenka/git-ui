@@ -22,20 +22,6 @@ const RepoModal = () => {
   }
 
 
-  const handleFolderChange = (event) => {
-    const files = event.target.files;
-    if (files.length > 0) {
-      const firstFile = files[0];
-      const folderPath = firstFile.webkitRelativePath.split("/")[0];
-      const folderAbsolutePath = files[0].webkitRelativePath.split("/").slice(0, -1).join("/");
-
-      setRepoPath(folderAbsolutePath);
-      setProjectName(folderPath);
-      message.success("Folder selected successfully!");
-    } else {
-      message.error("Failed to select folder.");
-    }
-  };
 
   
   const handlePathChange = (e) => {
@@ -119,24 +105,7 @@ const RepoModal = () => {
                   onChange={handlePathChange}
                 />
               </Col>
-              <Col flex="none">
-                <label>
-                  <Button
-                    icon={<FolderOpenOutlined />}
-                    onClick={() => document.getElementById("hiddenInput").click()}
-                  >
-                    Select Project
-                  </Button>
-                  <input
-                    type="file"
-                    webkitdirectory="true"
-                    directory="true"
-                    id="hiddenInput"
-                    style={{ display: "none" }}
-                    onChange={handleFolderChange}
-                  />
-                </label>
-              </Col>
+              
             </Row>
           </Form.Item>
 

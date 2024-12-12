@@ -111,5 +111,6 @@ export const selectCommitError = (state) => state.prompts.commitError;  // Selec
 export const selectTransformedCodestatus = (state)=> state.prompts.transfromcodestatus;
 export const selectCommitResponse = (state)=> state.prompts.commitresponse;
 export const selectllmstatus = ( state)=> state.prompts.status
+export const promprerror = (state)=> state.prompts.error
 
 export default promptSlice.reducer;

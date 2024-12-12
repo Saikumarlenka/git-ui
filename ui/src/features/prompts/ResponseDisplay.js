@@ -94,7 +94,7 @@ const ResponseDisplay = ({ response }) => {
   const { type, icon, title, description } = getStatusDetails();
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center p-4 min-h-[300px]">
+    <div className="bg-gray-100 flex  justify-center p-4 min-h-[300px]">
       <Card 
         className="w-full max-w-md"
         title={
@@ -128,11 +128,23 @@ const ResponseDisplay = ({ response }) => {
             message="Applied Changes" 
             description={
               <ul className="list-disc pl-4">
-                {response.applied_changes.map((change, index) => (
-                  <li key={index}>{change}</li>
-                ))}
+                {response.applied_changes && response.applied_changes.length > 0 ? (
+                  response.applied_changes.map((change, index) => (
+                    <li key={index}>
+                      <strong>File Path:</strong> {change.file_path} <br />
+                      <strong>Action:</strong> {change.action_type} <br />
+                      <strong>Start Line:</strong> {change.start_line} <br />
+                      {/* <pre className="bg-gray-100 p-2 overflow-auto">
+                        {change.new_code}
+                      </pre> */}
+                    </li>
+                  ))
+                ) : (
+                  <li>No applied changes found.</li>
+                )}
               </ul>
             }
+            
             type="success"
             showIcon
             icon={<CheckCircleOutlined />}
