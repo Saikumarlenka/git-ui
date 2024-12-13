@@ -60,11 +60,11 @@ const dummyData = {
   },
 };
 
-// LLM Providers
+// LLM Providers <a href="https://imgbb.com/"><img src="https://i.ibb.co/hgjvC42/images.png" alt="images" border="0"></a>
 const LLM_PROVIDERS = [
   // { id: 'anthropic', name: 'Anthropic', logo: 'https://i.ibb.co/yWfJFPx/icons8-claude-120.png'},
   { id: "openai", name: "OpenAI", logo: "https://openai.com/favicon.ico" },
-  { id: "gemini", name: "Gemini", logo: "https://lh3.googleusercontent.com/c-z7BK6NYcQIruZJd9A4KI1m8YrBauXH0VRglPudmj9Fgr5yzgJCsnaZ5W_nxZnB2hazA9hsg05uX1djFYPbMS-DsbYXp6UtVKFfdicBfF8klhVshJ8" },
+  { id: "gemini", name: "Gemini", logo: "https://i.ibb.co/hgjvC42/images.png" },
 ];
 
 // Models for each provider

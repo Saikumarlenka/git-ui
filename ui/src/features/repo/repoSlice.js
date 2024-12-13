@@ -7,6 +7,7 @@ const initialState = {
   status: "idle",
   loading: false,
   error: null,
+  indexing_status:"idle",
   successMessage: null,
 };
 
@@ -96,19 +97,20 @@ const repoSlice = createSlice({
 
       // Index repository
       .addCase(indexRepo.pending, (state) => {
-        state.loading = true;
+        state.indexing_status = "loading";
         state.successMessage = null;
         state.error = null;
         
       })
       .addCase(indexRepo.fulfilled, (state, action) => {
-        state.loading = false;
+       
         state.successMessage = action.payload.message || "Repository indexed successfully!";
         state.repos.push(action.payload.repository); 
+        state.indexing_status="succeeded"
       
       })
       .addCase(indexRepo.rejected, (state, action) => {
-        state.loading = false;
+        state.indexing_status="failed"
       
         state.successMessage = null;
         state.error = action.payload;
@@ -124,5 +126,6 @@ export const selectRepoStatus = (state) => state.repos.status;
 export const selectRepoError = (state) => state.repos.error;
 export const selectSuccessMessage = (state) => state.repos.successMessage;
 export const selectLoading = (state)=>state.repos.loading
+export const selectindexingstatus=(state) => state.repos.indexing_status
 
 export default repoSlice.reducer;
